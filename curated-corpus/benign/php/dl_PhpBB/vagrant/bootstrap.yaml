@@ -1,0 +1,35 @@
+---
+ip: "192.168.56.56"
+memory: 2048
+cpus: 1
+hostname: phpbb
+name: phpbb
+provider: virtualbox
+
+authorize: ~/.ssh/id_rsa.pub
+
+keys:
+    - ~/.ssh/id_rsa
+
+folders:
+    - map: "."
+      to: "/home/vagrant/phpbb"
+      php: "7.3"
+
+sites:
+    - map: phpbb.app
+      to: "/home/vagrant/phpbb/phpBB"
+      type: apache
+
+# blackfire:
+#     - id: foo
+#       token: bar
+#       client-id: foo
+#       client-token: bar
+
+# ports:
+#     - send: 50000
+#       to: 5000
+#     - send: 7777
+#       to: 777
+#       protocol: udp
